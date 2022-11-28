@@ -1,0 +1,110 @@
+{% load static %}
+
+
+
+<html lang="en">
+    <head>
+       
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.0/dist/chart.min.js"></script>
+        <meta charset="UTF-8">
+        <title>Vancouver Crime</title>
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container-fluid">
+              <a class="navbar-brand" href="#">Navbar</a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                  <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Link</a>
+                  </li>
+                  
+              </div>
+            </div>
+          </nav>
+        
+          <div class="row">
+            <div class="col-md-7">
+                <div>
+                    <h4>Vancouver Crime</h4>
+                </div>
+
+                <table id="table" class="table table-striped table-primary">
+                    <tr class="bg-primary text-white">
+                        <th>Crime</th>
+                        <th>Year</th>
+                        <th>Month</th>
+                        <th>Day</th>
+                        <th>Hour</th>
+                        <th>Minute</th>
+                        <th>Hundred Block Radius</th>
+                        <th>Neighbourhood</th>
+                        <th>X</th>
+                        <th>Y</th>
+                    </tr>
+                    {% for c in crimes %}
+                    <tr>
+                        <td>{{c.cType}}</td>
+                        <td>{{c.year}}</td>
+                        <td>{{c.month}}</td>
+                        <td>{{c.day}}</td>
+                        <td>{{c.hour}}</td>
+                        <td>{{c.Minute}}</td>
+                        <td>{{c.hundredBlock}}</td>
+                        <td>{{c.neighbourhood}}</td>
+                        <td>{{c.x}}</td>
+                        <td>{{c.y}}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+
+                
+
+                {% if crimes.has_previous %}
+                    <a href="?page={{ crimes.previous_page_number }}">Previous Page</a>
+
+                    {% if crimes.number > 3 %}
+                        <a href="?page=1">1</a>
+                        {% if crimes.number > 4 %} 
+                            <span>...</span>
+                        {% endif %} 
+                    {% endif %} 
+                {% endif %} 
+
+                {% for num in crimes.paginator.page_range %} 
+                    {% if crimes.number == num %} 
+                        <a href="?page={{ num }}">{{ num }}</a>
+                    {% elif num > crimes.number|add:'-3' and num < crimes.number|add:'3' %}
+                        <a href="?page={{ num }}">{{ num }}</a> 
+                    {% endif %} 
+                {% endfor %} 
+
+                {% if crimes.has_next %} 
+                    {% if crimes.number < crimes.paginator.num_pages|add:'-3' %} 
+                        <span>...</span>
+                        <a href="?page={{ crimes.paginator.num_pages }}">{{ crimes.paginator.num_pages }}</a>
+                    {% elif crimes.number < page_obj.paginator.num_pages|add:'-2' %}
+                        <a href="?page={{ crimes.paginator.num_pages }}">{{ crimes.paginator.num_pages }}</a>
+                    {% endif %} 
+
+                    <a href="?page={{ crimes.next_page_number }}">Next Page</a>
+                {% endif %}
+
+            </div>
+          </div>
+        
+    </body>
+</html>
+
+<!-- <ul>
+    {% for crime in crimes %}
+    <p>{{crime.cType}}</p>
+    {% endfor %}
+</ul> -->
